@@ -12,13 +12,19 @@
         @csrf
 
         <div class=" mb-3">
-            <label for="" class=" form-label">Category Title</label>
-            <input type="text" class=" form-control" name="title">
+            <label for="" class=" form-label ">Category Title</label>
+            <input type="text" class=" form-control @error('title') is-invalid @enderror" name="title">
+            @error('title')
+                <div class=" invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class=" mb-3">
-            <label for="" class=" form-label">Description</label>
-           <textarea name="description" class=" form-control" cols="30" rows="10"></textarea>
+            <label for="" class=" form-label ">Description</label>
+           <textarea name="description" class=" form-control  @error('description') is-invalid @enderror" cols="30" rows="10"></textarea>
+           @error('description')
+                <div class=" invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
 

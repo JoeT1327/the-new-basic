@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
-use App\Http\Requests\StoreItemRequest;
-use App\Http\Requests\UpdateItemRequest;
+use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
@@ -14,7 +13,7 @@ class ItemController extends Controller
     public function index()
     {
         return view("inventroy.index",[
-            "items" => Item::paginate(10)
+            "items" => Item::all()
         ]);
     }
 
@@ -29,15 +28,16 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreItemRequest $request)
+    public function store(Request $request)
     {
+        
         $item = new Item();
         $item->name = $request->name;
         $item->price = $request->price;
         $item->stock = $request->stock;
 
         $item->save();
-        return redirect()->route("item.index")->with("status", "New item has been already added");
+        return redirect()->route("item.index");
     }
 
     /**
@@ -45,7 +45,9 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
+
         return view("inventroy.show",compact('item'));
+
     }
 
     /**
@@ -54,12 +56,13 @@ class ItemController extends Controller
     public function edit(Item $item)
     {
         return view("inventroy.edit",compact('item'));
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateItemRequest $request, Item $item)
+    public function update(Request $request, Item $item)
     {
         $item->name = $request->name;
         $item->price = $request->price;
@@ -67,7 +70,7 @@ class ItemController extends Controller
 
         $item->update();
 
-        return redirect()->route("item.index")->with("status", "An item has already been updated");
+        return redirect()->route("item.index");
     }
 
     /**
@@ -76,6 +79,6 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         $item->delete();
-        return redirect()->back()->with("status", "An item has already been deleted");
+        return redirect()->back();
     }
 }

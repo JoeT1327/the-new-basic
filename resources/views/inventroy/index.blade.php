@@ -7,6 +7,12 @@
 @section('content')
     <h4>I am Item List Page</h4>
 
+    @if (session('status'))
+        <div class=" alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
     <table class=" table table-bordered">
         <thead>
             <tr>
@@ -48,5 +54,7 @@
             @endforelse
         </tbody>
     </table>
+
+    {{ $items->onEachSide(1)->links() }}
 
     @endsection
