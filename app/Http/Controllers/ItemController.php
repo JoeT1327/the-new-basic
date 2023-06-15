@@ -13,9 +13,30 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return view("inventroy.index",[
-            "items" => Item::paginate(10)
-        ]);
+
+    //     $items = Item::when(true,function($query){
+    //         $query->where("id",10);
+    //     })->get();
+
+    //    return $items;
+
+        $items = Item::when(request()->has("keyword"),function($query){
+            $keyword = request()->keyword;
+            $query->where("name","like","%".$keyword."%");
+            $query->orWhere("price","like","%".$keyword."%");
+            $query->orWhere("stock","like","%".$keyword."%");
+
+        })
+        ->when(request()->has("name"),function($query){
+            $sortType = request()->name ?? "asc";
+            $query->orderBy("name",$sortType);
+        })
+        ->paginate(5)->withQueryString();
+
+        //withQueryString က pagination တစ်ခုနဲ့တစ်ခုအပြောင်းအလဲမှာ keyword ပါသွားအောင်လုပ်တဲ့ laravel က provide ထားတဲ့ method
+
+
+        return view("inventroy.index", compact('items'));
     }
 
     /**
