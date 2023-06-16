@@ -9,11 +9,23 @@ use Illuminate\Support\Facades\Validator;
 
 class ItemApiController extends Controller
 {
+
+    public function __construct()
+    {
+        // $this->middleware('cat')->only(["store", "delete","index"]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
+        // if(!request()->has('token')){
+        //     return response()->json(["message" => "api token is required. "],401);
+        // }else if(request()->token !== "tza"){
+        //     return response()->json(["message" => "api token does not correct. "],401 );
+        // }
+
         $items = Item::when(request()->has("keyword"),function($query){
             $keyword = request()->keyword;
             $query->where("name","like","%".$keyword."%");
@@ -59,7 +71,7 @@ class ItemApiController extends Controller
             "stock" => $request->stock,
         ]);
 
-        return response()->json($item);
+        return new ItemResource($item);
     }
 
     /**
@@ -102,7 +114,7 @@ class ItemApiController extends Controller
             "stock" => $request->stock,
         ]);
 
-        return response()->json($item);
+        return new ItemResource($item);
 
         //update မှာ form-data နဲံ့သုံးလို့မရ xxx-urlencoded နဲ့ပဲရ
     }
